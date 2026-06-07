@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 import { MAIN_PAGE_IMAGES } from "@/lib/mainPictures";
 import type { TestimonialDto } from "@/lib/types";
@@ -146,7 +146,7 @@ export function HomeReviewsSection({ testimonials }: { testimonials: Testimonial
 
           <div className="mt-auto pt-4">
             <Link
-              href="https://vk.com"
+              href="https://vk.com/travelwithustwu"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[14px] font-bold text-white/90 underline-offset-4 hover:text-[#ec9b74] hover:underline"
