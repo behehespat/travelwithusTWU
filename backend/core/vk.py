@@ -196,7 +196,7 @@ def notify_booking_via_vk(booking) -> tuple[bool, str]:
         if exc.code == 901:
             hint = (
                 " Пользователь не разрешил сообщения от сообщества — "
-                "попросите написать «Привет» в https://vk.com/travelwithustwu"
+                "попросите написать «Привет» в https://vk.com/TravelWithUsTWU"
             )
         elif exc.code == 902:
             hint = " Пользователь запретил сообщения от сообщества."

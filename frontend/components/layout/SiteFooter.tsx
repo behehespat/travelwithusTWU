@@ -94,7 +94,7 @@ export function SiteFooter({ className = "" }: { className?: string }) {
               </li>
               <li>
                 <a
-                  href="https://vk.com/travelwithustwu"
+                  href="https://vk.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-[#ec9b74] hover:underline"
