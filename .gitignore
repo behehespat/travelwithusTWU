@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+backend/.venv/
+
+# Secrets and local data
+backend/.env
+backend/db.sqlite3
+frontend/.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.cursor/
+
+# Локальные заметки
+чттоо надо для бота.txt

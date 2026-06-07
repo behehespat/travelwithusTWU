@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Лицензионные файлы из Mark Simonson (или вашего источника), совпадающие с Figma.
+ * Если файлов нет — браузер пропустит @font-face и возьмёт следующий шрифт из font-family.
+ */
+@font-face {
+  font-family: "Proxima Nova";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ProximaNova-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Proxima Nova";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/ProximaNova-Bold.woff2") format("woff2");
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  /** Сдвиг контента при скрытом #lead (вошёл пользователь). Было 1339px — маркет (top 3977) залезал на карточки туров; ~880 сохраняет зазор туры → слайдер → «Всё самое главное». */
+  --twu-lead-gap: 0px;
+}
+
+html[data-twu-auth="1"] {
+  --twu-lead-gap: 880px;
+}
+
+body {
+  margin: 0;
+  color: var(--foreground);
+  background: var(--background);
+}
+
+/** Self-host: то же семейство, что в макете Figma (Mark Simonson). */
+.font-proxima-local {
+  font-family: "Proxima Nova", "proxima-nova", var(--font-inter-fallback), ui-sans-serif, system-ui,
+    sans-serif;
+}
+
+/**
+ * Adobe Fonts: семейство из вашего kit (обычно proxima-nova).
+ * Должно совпадать с тем, что отдаёт CSS по ссылке use.typekit.net.
+ */
+.font-proxima-adobe {
+  font-family: "proxima-nova", "Proxima Nova", sans-serif;
+}
+
+img {
+  max-width: none;
+}
+
+@keyframes china-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(
+      calc(
+        -1 * var(--china-slide-count, 6) *
+          (var(--china-card-w, 215px) + var(--china-card-gap, 57px))
+      )
+    );
+  }
+}
+
+.china-marquee-track {
+  animation: china-marquee var(--china-marquee-duration, 100s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .china-marquee-track {
+    animation: none;
+    transform: none;
+  }
+}

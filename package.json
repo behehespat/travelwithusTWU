@@ -1,0 +1,19 @@
+{
+  "name": "travelwithus",
+  "private": true,
+  "description": "TravelWithUs — единые команды запуска (Django API + Next.js)",
+  "scripts": {
+    "setup": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/setup.ps1",
+    "dev": "concurrently -k -n API,WEB -c blue,green \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/dev-api.ps1",
+    "dev:web": "npm run dev --prefix frontend",
+    "migrate": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/django.ps1 migrate",
+    "db": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/django.ps1 dbshell",
+    "db:open": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/open-db.ps1",
+    "admin": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/django.ps1 createsuperuser",
+    "django": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/django.ps1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
