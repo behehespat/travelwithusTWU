@@ -19,7 +19,6 @@ frontend/out/
 # OS / IDE
 .DS_Store
 Thumbs.db
-.cursor/
 
 # Локальные заметки
 чттоо надо для бота.txt

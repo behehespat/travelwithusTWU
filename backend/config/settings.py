@@ -19,16 +19,12 @@ if _env_path.exists():
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-only-change-in-production")
 
-_on_vercel = bool(os.environ.get("VERCEL"))
-DEBUG = os.environ.get("DEBUG", "false" if _on_vercel else "true").lower() in ("1", "true", "yes")
+DEBUG = os.environ.get("DEBUG", "true").lower() in ("1", "true", "yes")
 
-_allowed_hosts = ["127.0.0.1", "localhost", "testserver", ".vercel.app"]
+_allowed_hosts = ["127.0.0.1", "localhost", "testserver"]
 _extra_hosts = os.environ.get("ALLOWED_HOSTS", "")
 if _extra_hosts:
     _allowed_hosts.extend(h.strip() for h in _extra_hosts.split(",") if h.strip())
-_vercel_url = os.environ.get("VERCEL_URL", "").strip()
-if _vercel_url:
-    _allowed_hosts.append(_vercel_url)
 ALLOWED_HOSTS = list(dict.fromkeys(_allowed_hosts))
 
 INSTALLED_APPS = [
@@ -75,6 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+# PostgreSQL (Neon): задайте DATABASE_URL в backend/.env
+# Локально без DATABASE_URL — SQLite (backend/db.sqlite3).
 _database_url = os.environ.get("DATABASE_URL", "").strip()
 if _database_url:
     import dj_database_url
@@ -83,7 +81,7 @@ if _database_url:
         "default": dj_database_url.config(
             default=_database_url,
             conn_max_age=600,
-            ssl_require=_on_vercel,
+            ssl_require=True,
         )
     }
 else:
@@ -128,24 +126,19 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3100",
 ]
 
-# В dev Next часто на другом порту (3001, 3100, …) — иначе браузер блокирует POST на API.
 if DEBUG:
     CORS_ALLOWED_ORIGIN_REGEXES = [
         r"^http://localhost:\d+$",
         r"^http://127\.0\.0\.1:\d+$",
     ]
 else:
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https://.*\.vercel\.app$",
-    ]
+    CORS_ALLOWED_ORIGIN_REGEXES = []
 
 CORS_ALLOW_CREDENTIALS = True
 
-# VK: ключ сообщества (Управление → Работа с API → Ключи доступа, право messages).
 VK_COMMUNITY_TOKEN = os.environ.get("VK_COMMUNITY_TOKEN", "")
 VK_API_VERSION = os.environ.get("VK_API_VERSION", "5.199")
 
-# Ссылка на фронтенд в письмах (сброс пароля).
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:3100")
 if FRONTEND_URL and FRONTEND_URL not in CORS_ALLOWED_ORIGINS:
     CORS_ALLOWED_ORIGINS.append(FRONTEND_URL.rstrip("/"))
@@ -153,10 +146,10 @@ if FRONTEND_URL and FRONTEND_URL not in CORS_ALLOWED_ORIGINS:
 CSRF_TRUSTED_ORIGINS: list[str] = []
 if FRONTEND_URL:
     CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL.rstrip("/"))
-if _vercel_url:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{_vercel_url}")
+_extra_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+if _extra_csrf:
+    CSRF_TRUSTED_ORIGINS.extend(u.strip() for u in _extra_csrf.split(",") if u.strip())
 
-# Почта: Gmail travelwithuswtu@gmail.com + пароль приложения в EMAIL_HOST_PASSWORD.
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() in ("1", "true", "yes")
