@@ -17,11 +17,19 @@ if _env_path.exists():
         key, _, value = line.partition("=")
         os.environ.setdefault(key.strip(), value.strip())
 
-SECRET_KEY = "django-insecure-dev-only-change-in-production"
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-only-change-in-production")
 
-DEBUG = True
+_on_vercel = bool(os.environ.get("VERCEL"))
+DEBUG = os.environ.get("DEBUG", "false" if _on_vercel else "true").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "testserver"]
+_allowed_hosts = ["127.0.0.1", "localhost", "testserver", ".vercel.app"]
+_extra_hosts = os.environ.get("ALLOWED_HOSTS", "")
+if _extra_hosts:
+    _allowed_hosts.extend(h.strip() for h in _extra_hosts.split(",") if h.strip())
+_vercel_url = os.environ.get("VERCEL_URL", "").strip()
+if _vercel_url:
+    _allowed_hosts.append(_vercel_url)
+ALLOWED_HOSTS = list(dict.fromkeys(_allowed_hosts))
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -67,12 +75,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+_database_url = os.environ.get("DATABASE_URL", "").strip()
+if _database_url:
+    import dj_database_url
+
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=_database_url,
+            conn_max_age=600,
+            ssl_require=_on_vercel,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -115,7 +135,9 @@ if DEBUG:
         r"^http://127\.0\.0\.1:\d+$",
     ]
 else:
-    CORS_ALLOWED_ORIGIN_REGEXES = []
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.vercel\.app$",
+    ]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -125,6 +147,14 @@ VK_API_VERSION = os.environ.get("VK_API_VERSION", "5.199")
 
 # Ссылка на фронтенд в письмах (сброс пароля).
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:3100")
+if FRONTEND_URL and FRONTEND_URL not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(FRONTEND_URL.rstrip("/"))
+
+CSRF_TRUSTED_ORIGINS: list[str] = []
+if FRONTEND_URL:
+    CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL.rstrip("/"))
+if _vercel_url:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{_vercel_url}")
 
 # Почта: Gmail travelwithuswtu@gmail.com + пароль приложения в EMAIL_HOST_PASSWORD.
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
