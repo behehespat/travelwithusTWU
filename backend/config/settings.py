@@ -19,6 +19,19 @@ def _normalize_origin(value: str) -> str:
         return f"https://{value}"
     return value
 
+
+def _normalize_host(value: str) -> str:
+    """Убирает схему/слэши, если домен случайно вставили как URL."""
+    value = value.strip().rstrip("/")
+    if not value:
+        return value
+    if "://" in value:
+        from urllib.parse import urlparse
+
+        parsed = urlparse(value)
+        return (parsed.hostname or value).strip()
+    return value
+
 # Секреты из backend/.env локально (не коммитить).
 _env_path = BASE_DIR / ".env"
 if _env_path.exists():
@@ -34,16 +47,31 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-only-change-in-pr
 DEBUG = os.environ.get("DEBUG", "true").lower() in ("1", "true", "yes")
 
 ALLOWED_HOSTS = [
-    h.strip()
+    _normalize_host(h)
     for h in os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
     if h.strip()
 ]
 
+for _default_host in ("127.0.0.1", "localhost", "testserver"):
+    if _default_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_default_host)
+
 # Railway подставляет публичный домен сервиса.
 for _railway_var in ("RAILWAY_PUBLIC_DOMAIN",):
-    _host = (os.environ.get(_railway_var) or "").strip()
+    _host = _normalize_host(os.environ.get(_railway_var) or "")
     if _host and _host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(_host)
+
+# Railway healthcheck шлёт Host: healthcheck.railway.app — без этого деплой «offline».
+_on_railway = bool(
+    os.environ.get("DATABASE_URL")
+    or os.environ.get("RAILWAY_ENVIRONMENT")
+    or os.environ.get("RAILWAY_PUBLIC_DOMAIN")
+)
+if _on_railway:
+    for _railway_host in ("healthcheck.railway.app", ".up.railway.app"):
+        if _railway_host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(_railway_host)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
