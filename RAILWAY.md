@@ -103,10 +103,10 @@ railway run python manage.py createsuperuser
 
 | Переменная | Значение |
 |------------|----------|
-| `NEXT_PUBLIC_API_URL` | `https://ВАШ-BACKEND.up.railway.app` |
-| `API_URL` | то же (для SSR на главной и страницах туров) |
+| `API_URL` | `https://${{ travelwithusTWU.RAILWAY_PUBLIC_DOMAIN }}` |
+| `NEXT_PUBLIC_API_URL` | то же (опционально; браузер ходит через proxy `/api` на том же домене) |
 
-**Важно:** после смены `NEXT_PUBLIC_API_URL` нужен **Redeploy** (пересборка).
+**Важно:** `API_URL` нужен при **сборке** (rewrite в `next.config.ts`) и при SSR. После смены — **Redeploy** frontend.
 
 ### Деплой
 
