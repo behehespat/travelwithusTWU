@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { serverApiBase } from "@/lib/apiBase";
-import { isLocalTourImage, withLocalTourImages } from "@/lib/tourAssets";
+import { withLocalTourImages } from "@/lib/tourAssets";
 import type { TourDetailDto } from "@/lib/types";
 import { TourBookingCta } from "@/components/tour/TourBookingCta";
+import { TourPhoto } from "@/components/tour/TourPhoto";
 
 export const dynamic = "force-dynamic";
 
@@ -33,10 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function formatPrice(n: number) {
   if (!n) return "-";
   return new Intl.NumberFormat("ru-RU").format(n) + " ₽";
-}
-
-function tourImageUnoptimized(src: string): boolean {
-  return isLocalTourImage(src) || src.includes("figma.com");
 }
 
 export default async function TourDetailPage({ params }: Props) {
@@ -69,13 +65,9 @@ export default async function TourDetailPage({ params }: Props) {
       ) : null}
 
       <div className="relative mb-12 aspect-[21/9] w-full overflow-hidden rounded-[20px] bg-[#f7f7f6]">
-        <Image
+        <TourPhoto
           src={tour.image_url}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 896px"
-          unoptimized={tourImageUnoptimized(tour.image_url)}
+          className="absolute inset-0 h-full w-full object-cover"
           priority
         />
       </div>
@@ -89,13 +81,9 @@ export default async function TourDetailPage({ params }: Props) {
               className="grid gap-6 border-b border-black/10 pb-10 last:border-0 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-start"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[16px] bg-[#f7f7f6]">
-                <Image
+                <TourPhoto
                   src={place.image_url}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 480px"
-                  unoptimized={tourImageUnoptimized(place.image_url)}
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
               <div>
