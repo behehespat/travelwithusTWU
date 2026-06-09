@@ -46,7 +46,7 @@ export function SiteFooter({ className = "" }: { className?: string }) {
             <ul className="mt-3 space-y-2 text-[14px] font-medium text-white/90">
               {tourLinks.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-[#ec9b74] hover:underline">
+                  <Link href={l.href} className="twu-link-soft hover:text-[#ec9b74]">
                     {l.label}
                   </Link>
                 </li>
@@ -60,22 +60,22 @@ export function SiteFooter({ className = "" }: { className?: string }) {
             </p>
             <ul className="mt-3 space-y-2 text-[14px] font-medium text-white/90">
               <li>
-                <Link href="/phrasebook" className="hover:text-[#ec9b74] hover:underline">
+                <Link href="/phrasebook" className="twu-link-soft hover:text-[#ec9b74]">
                   Разговорник
                 </Link>
               </li>
               <li>
-                <Link href="/reminder" className="hover:text-[#ec9b74] hover:underline">
+                <Link href="/reminder" className="twu-link-soft hover:text-[#ec9b74]">
                   Напоминания в поездке
                 </Link>
               </li>
               <li>
-                <Link href="/login" className="hover:text-[#ec9b74] hover:underline">
+                <Link href="/login" className="twu-link-soft hover:text-[#ec9b74]">
                   Войти
                 </Link>
               </li>
               <li>
-                <Link href="/account" className="hover:text-[#ec9b74] hover:underline">
+                <Link href="/account" className="twu-link-soft hover:text-[#ec9b74]">
                   Личный кабинет
                 </Link>
               </li>
@@ -88,7 +88,7 @@ export function SiteFooter({ className = "" }: { className?: string }) {
             </p>
             <ul className="mt-3 space-y-2 text-[14px] text-white/85">
               <li>
-                <a href="mailto:travelwithuswtu@gmail.com" className="hover:text-[#ec9b74] hover:underline">
+                <a href="mailto:travelwithuswtu@gmail.com" className="twu-link-soft hover:text-[#ec9b74]">
                   travelwithuswtu@gmail.com
                 </a>
               </li>
@@ -97,13 +97,13 @@ export function SiteFooter({ className = "" }: { className?: string }) {
                   href="https://vk.com/travelwithustwu"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#ec9b74] hover:underline"
+                  className="twu-link-soft hover:text-[#ec9b74]"
                 >
                   ВКонтакте
                 </a>
               </li>
               <li>
-                <Link href="/#tours" className="hover:text-[#ec9b74] hover:underline">
+                <Link href="/#tours" className="twu-link-soft hover:text-[#ec9b74]">
                   Все туры на главной
                 </Link>
               </li>
@@ -116,10 +116,10 @@ export function SiteFooter({ className = "" }: { className?: string }) {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-8 py-6 text-left text-[12px] text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-12 lg:text-[13px]">
           <p>© {new Date().getFullYear()} TravelWithUs. Все права защищены.</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link href="/privacy" className="hover:text-[#ec9b74] hover:underline">
+            <Link href="/privacy" className="twu-link-soft hover:text-[#ec9b74]">
               Политика конфиденциальности
             </Link>
-            <Link href="/terms" className="hover:text-[#ec9b74] hover:underline">
+            <Link href="/terms" className="twu-link-soft hover:text-[#ec9b74]">
               Пользовательское соглашение
             </Link>
           </div>

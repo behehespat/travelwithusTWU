@@ -32,7 +32,7 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4">
+    <form onSubmit={onSubmit} className="twu-animate-in-up mx-auto max-w-md space-y-4">
       <p className="text-[14px] leading-relaxed text-[#27304f]/80">
         Укажите email, который вы указали при регистрации. Мы отправим ссылку для создания нового пароля.
       </p>
@@ -60,7 +60,7 @@ export function ForgotPasswordForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-[69px] bg-[#ec9b74] py-3 text-center text-[18px] font-bold text-white disabled:opacity-60"
+        className="twu-btn-soft w-full rounded-[69px] bg-[#ec9b74] py-3 text-center text-[18px] font-bold text-white disabled:opacity-60"
       >
         {loading ? "…" : "Отправить ссылку"}
       </button>

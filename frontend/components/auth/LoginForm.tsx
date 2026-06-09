@@ -53,7 +53,7 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4">
+    <form onSubmit={onSubmit} className="twu-animate-in-up mx-auto max-w-md space-y-4">
       {searchParams.get("registered") === "1" ? (
         <p className="rounded-[12px] border border-[#ec9b74]/40 bg-[#f7f7f6] px-4 py-3 text-[14px] font-bold text-[#27304f]">
           Аккаунт создан. Войдите с тем же логином и паролем.
@@ -100,7 +100,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-[69px] bg-[#ec9b74] py-3 text-center text-[18px] font-bold text-white disabled:opacity-60"
+        className="twu-btn-soft w-full rounded-[69px] bg-[#ec9b74] py-3 text-center text-[18px] font-bold text-white disabled:opacity-60"
       >
         {loading ? "…" : "Войти"}
       </button>

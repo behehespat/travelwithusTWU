@@ -81,3 +81,154 @@ img {
     transform: none;
   }
 }
+
+/* --- TravelWithUs: лёгкие микроанимации (CSS, без библиотек) --- */
+
+@keyframes twu-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes twu-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes twu-gallery-fade {
+  from {
+    opacity: 0.35;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.twu-animate-in {
+  animation: twu-fade-in 0.55s ease-out both;
+}
+
+.twu-animate-in-up {
+  animation: twu-fade-in-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.twu-page-enter > .twu-animate-in-up,
+.twu-page-enter > .twu-animate-in {
+  animation-duration: 0.65s;
+}
+
+.twu-delay-1 {
+  animation-delay: 0.06s;
+}
+.twu-delay-2 {
+  animation-delay: 0.12s;
+}
+.twu-delay-3 {
+  animation-delay: 0.18s;
+}
+.twu-delay-4 {
+  animation-delay: 0.24s;
+}
+
+.twu-stagger > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.twu-stagger > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.twu-stagger > *:nth-child(3) {
+  animation-delay: 0.19s;
+}
+.twu-stagger > *:nth-child(4) {
+  animation-delay: 0.26s;
+}
+.twu-stagger > *:nth-child(5) {
+  animation-delay: 0.33s;
+}
+
+.twu-hover-lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.twu-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(39, 48, 79, 0.08);
+}
+
+.twu-link-soft {
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+  text-underline-offset: 3px;
+}
+
+.twu-link-soft:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+.twu-btn-soft {
+  transition:
+    transform 0.18s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.twu-btn-soft:hover {
+  transform: translateY(-1px);
+}
+
+.twu-btn-soft:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.twu-gallery-photo {
+  animation: twu-gallery-fade 0.45s ease-out both;
+}
+
+.twu-card-soft {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.twu-card-soft:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(39, 48, 79, 0.1);
+}
+
+.twu-header-bar {
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .twu-animate-in,
+  .twu-animate-in-up,
+  .twu-gallery-photo {
+    animation: none !important;
+  }
+
+  .twu-hover-lift:hover,
+  .twu-card-soft:hover,
+  .twu-btn-soft:hover {
+    transform: none;
+  }
+}

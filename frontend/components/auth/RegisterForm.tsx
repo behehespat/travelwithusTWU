@@ -58,7 +58,7 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4">
+    <form onSubmit={onSubmit} className="twu-animate-in-up mx-auto max-w-md space-y-4">
       <div>
         <label className={label} htmlFor="reg-username">
           Логин
@@ -153,7 +153,7 @@ export function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-[69px] bg-[#ec9b74] py-3 text-center text-[18px] font-bold text-white disabled:opacity-60"
+        className="twu-btn-soft w-full rounded-[69px] bg-[#ec9b74] py-3 text-center text-[18px] font-bold text-white disabled:opacity-60"
       >
         {loading ? "…" : "Создать аккаунт"}
       </button>

@@ -74,20 +74,42 @@ Railway соберёт Python из `requirements.txt` и запустит `start
 
 ### Суперпользователь (один раз)
 
-В Railway: сервис **backend** → **Settings** → **Deploy** → или вкладка с shell:
+**Важно:** не запускайте `python manage.py createsuperuser` локально, если в окружении есть `DATABASE_URL` с хостом `postgres.railway.internal` — этот адрес работает **только внутри Railway**, с вашего ПК будет ошибка `could not translate host name`.
 
-```bash
-python manage.py createsuperuser
+**Правильный способ — Railway CLI:**
+
+```powershell
+npm i -g @railway/cli
+railway login
+cd backend
+railway link
 ```
 
-Или локально через Railway CLI:
+Выберите проект → сервис **travelwithusTWU**, затем:
 
-```bash
-railway link
+```powershell
 railway run python manage.py createsuperuser
 ```
 
-Админка: `https://ВАШ-BACKEND.up.railway.app/admin/`
+Введите логин, email и пароль.
+
+**Сделать админом уже зарегистрированного пользователя:**
+
+```powershell
+railway run python manage.py shell
+```
+
+```python
+from django.contrib.auth.models import User
+u = User.objects.get(username="логин")
+u.is_staff = True
+u.is_superuser = True
+u.save()
+exit()
+```
+
+- Django-админка: `https://ВАШ-BACKEND.up.railway.app/admin/`
+- Панель на сайте: войти → **Админ панель** (`/admin-panel`)
 
 ---
 

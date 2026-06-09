@@ -163,7 +163,7 @@ export function AccountClient() {
   return (
     <div className="min-h-[70vh] bg-[#ebedf0]">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 sm:px-6 md:flex-row md:items-start">
-        <aside className="w-full shrink-0 rounded-xl border border-[#d3d9de] bg-white p-2 shadow-sm md:w-[240px]">
+        <aside className="twu-card-soft twu-animate-in-up w-full shrink-0 rounded-xl border border-[#d3d9de] bg-white p-2 shadow-sm md:w-[240px]">
           <nav className="space-y-0.5" aria-label="Разделы кабинета">
             <button type="button" className={sideNavBtn(section === "info")} onClick={() => setSection("info")}>
               Общая информация
@@ -187,7 +187,7 @@ export function AccountClient() {
         <main className="min-w-0 flex-1 space-y-4">
           {section === "info" ? (
             <>
-              <section className="rounded-xl border border-[#d3d9de] bg-white shadow-sm">
+              <section className="twu-card-soft twu-animate-in-up rounded-xl border border-[#d3d9de] bg-white shadow-sm">
                 <div className="border-b border-[#d3d9de] px-5 py-4">
                   <h2 className="text-[17px] font-bold text-[#27304f]">Контактные данные</h2>
                 </div>
@@ -242,7 +242,7 @@ export function AccountClient() {
               </section>
 
               {editingOpen ? (
-                <section className="rounded-xl border border-[#d3d9de] bg-white shadow-sm">
+                <section className="twu-card-soft twu-animate-in-up rounded-xl border border-[#d3d9de] bg-white shadow-sm">
                   <div className="border-b border-[#d3d9de] px-5 py-4">
                     <h2 className="text-[17px] font-bold text-[#27304f]">Редактировать</h2>
                     <p className="mt-1 text-[13px] text-[#626d7a]">Изменения сохраняются в вашем профиле на сайте.</p>
@@ -398,7 +398,7 @@ export function AccountClient() {
               ) : null}
             </>
           ) : (
-            <section className="rounded-xl border border-[#d3d9de] bg-white shadow-sm">
+            <section className="twu-card-soft twu-animate-in-up rounded-xl border border-[#d3d9de] bg-white shadow-sm">
               <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#d3d9de] px-5 py-4">
                 <div>
                   <h2 className="text-[17px] font-bold text-[#27304f]">Мои заявки на туры</h2>
