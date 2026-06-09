@@ -8,11 +8,13 @@ from .views import (
     TourListView,
 )
 from .views_admin import AdminBookingDetailView, AdminBookingsListView
+from .views_health import HealthView
 from .views_auth import LoginView, MeView, RegisterView
 from .views_booking import TourBookingCreateView
 from .views_password_reset import PasswordResetConfirmView, PasswordResetRequestView
 
 urlpatterns = [
+    path("health/", HealthView.as_view(), name="health"),
     path("auth/register/", RegisterView.as_view(), name="auth-register"),
     path("auth/login/", LoginView.as_view(), name="auth-login"),
     path("auth/me/", MeView.as_view(), name="auth-me"),

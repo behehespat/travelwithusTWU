@@ -1,13 +1,16 @@
 """
 Django settings for TravelWithUs API.
+Локально: SQLite + DEBUG. Railway: PostgreSQL + переменные окружения.
 """
 
 import os
 from pathlib import Path
 
+import dj_database_url
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Секреты и токены — только в backend/.env (не коммитить).
+# Секреты из backend/.env локально (не коммитить).
 _env_path = BASE_DIR / ".env"
 if _env_path.exists():
     for line in _env_path.read_text(encoding="utf-8").splitlines():
@@ -21,11 +24,17 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-only-change-in-pr
 
 DEBUG = os.environ.get("DEBUG", "true").lower() in ("1", "true", "yes")
 
-_allowed_hosts = ["127.0.0.1", "localhost", "testserver"]
-_extra_hosts = os.environ.get("ALLOWED_HOSTS", "")
-if _extra_hosts:
-    _allowed_hosts.extend(h.strip() for h in _extra_hosts.split(",") if h.strip())
-ALLOWED_HOSTS = list(dict.fromkeys(_allowed_hosts))
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
+    if h.strip()
+]
+
+# Railway подставляет публичный домен сервиса.
+for _railway_var in ("RAILWAY_PUBLIC_DOMAIN",):
+    _host = (os.environ.get(_railway_var) or "").strip()
+    if _host and _host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_host)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -42,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -71,17 +81,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# PostgreSQL (Neon): задайте DATABASE_URL в backend/.env
-# Локально без DATABASE_URL — SQLite (backend/db.sqlite3).
-_database_url = os.environ.get("DATABASE_URL", "").strip()
-if _database_url:
-    import dj_database_url
-
+if os.environ.get("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.config(
-            default=_database_url,
+            default=os.environ["DATABASE_URL"],
             conn_max_age=600,
-            ssl_require=True,
+            ssl_require=os.environ.get("DATABASE_SSL", "false").lower() in ("1", "true", "yes"),
         )
     }
 else:
@@ -104,7 +109,14 @@ TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
@@ -126,6 +138,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3100",
 ]
 
+_frontend_url = (os.environ.get("FRONTEND_URL") or "").rstrip("/")
+if _frontend_url and _frontend_url not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(_frontend_url)
+
 if DEBUG:
     CORS_ALLOWED_ORIGIN_REGEXES = [
         r"^http://localhost:\d+$",
@@ -136,20 +152,26 @@ else:
 
 CORS_ALLOW_CREDENTIALS = True
 
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if o.strip()
+]
+if _frontend_url and _frontend_url not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append(_frontend_url)
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# VK
 VK_COMMUNITY_TOKEN = os.environ.get("VK_COMMUNITY_TOKEN", "")
 VK_API_VERSION = os.environ.get("VK_API_VERSION", "5.199")
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:3100")
-if FRONTEND_URL and FRONTEND_URL not in CORS_ALLOWED_ORIGINS:
-    CORS_ALLOWED_ORIGINS.append(FRONTEND_URL.rstrip("/"))
 
-CSRF_TRUSTED_ORIGINS: list[str] = []
-if FRONTEND_URL:
-    CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL.rstrip("/"))
-_extra_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
-if _extra_csrf:
-    CSRF_TRUSTED_ORIGINS.extend(u.strip() for u in _extra_csrf.split(",") if u.strip())
-
+# Почта
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() in ("1", "true", "yes")

@@ -1,24 +1,36 @@
-# Dependencies
-node_modules/
-backend/.venv/
-
-# Secrets and local data
-backend/.env
-backend/db.sqlite3
-frontend/.env.local
+# Env и секреты
+.env
+.env.*
+!.env.example
+!**/.env.example
 
 # Python
-__pycache__/
-*.pyc
-*.pyo
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.py[cod]
+backend/db.sqlite3
+backend/staticfiles/
 
-# Next.js
+# Node
+node_modules/
+frontend/node_modules/
 frontend/.next/
 frontend/out/
+.next/
 
-# OS / IDE
+# IDE / OS
+.idea/
+.vscode/
+*.swp
 .DS_Store
 Thumbs.db
 
-# Локальные заметки
-чттоо надо для бота.txt
+# Logs
+*.log
+npm-debug.log*
+
+# Cursor / agents
+.cursor/
+.agents/
+skills-lock.json
