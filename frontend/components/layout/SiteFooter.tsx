@@ -88,13 +88,13 @@ export function SiteFooter({ className = "" }: { className?: string }) {
             </p>
             <ul className="mt-3 space-y-2 text-[14px] text-white/85">
               <li>
-                <a href="mailto:hello@travelwithus.example" className="hover:text-[#ec9b74] hover:underline">
-                  hello@travelwithus.example
+                <a href="mailto:travelwithuswtu@gmail.com" className="hover:text-[#ec9b74] hover:underline">
+                  travelwithuswtu@gmail.com
                 </a>
               </li>
               <li>
                 <a
-                  href="https://vk.com"
+                  href="https://vk.com/travelwithustwu"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-[#ec9b74] hover:underline"

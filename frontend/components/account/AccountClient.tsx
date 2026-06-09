@@ -23,10 +23,22 @@ function formatBookingDate(iso: string) {
   }
 }
 
+function accountTitle(me: MeDto): string {
+  const first = (me.first_name || "").trim();
+  if (first) return first;
+  if (me.username.includes("@")) return me.username.split("@")[0] || "Профиль";
+  return me.username;
+}
+
 function initials(name: string, username: string): string {
   const n = name.trim();
   if (n.length >= 2) return n.slice(0, 2).toUpperCase();
-  return username.slice(0, 2).toUpperCase();
+  const handle = username.includes("@") ? username.split("@")[0] : username;
+  return handle.slice(0, 2).toUpperCase();
+}
+
+function showUsernameHandle(username: string): boolean {
+  return !username.includes("@");
 }
 
 const sideNavBtn = (active: boolean) =>
@@ -157,7 +169,7 @@ export function AccountClient() {
 
   if (!me) return null;
 
-  const displayName = (me.first_name || "").trim() || me.username;
+  const displayName = accountTitle(me);
 
   return (
     <div className="min-h-[70vh] bg-[#ebedf0]">
@@ -171,8 +183,9 @@ export function AccountClient() {
           </div>
           <div className="min-w-0 text-white">
             <h1 className="truncate text-[26px] font-bold sm:text-[30px]">{displayName}</h1>
-            <p className="mt-1 text-[14px] text-white/75">@{me.username}</p>
-            {me.email ? <p className="mt-0.5 text-[13px] text-white/60">{me.email}</p> : null}
+            {showUsernameHandle(me.username) ? (
+              <p className="mt-1 text-[14px] text-white/75">@{me.username}</p>
+            ) : null}
           </div>
         </div>
       </div>
