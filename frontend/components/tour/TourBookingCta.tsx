@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -47,7 +47,7 @@ export function TourBookingCta({ tourSlug, tourTitle }: Props) {
   }
 
   return (
-    <div className="twu-animate-in-up twu-hover-lift mt-4 rounded-[16px] bg-[#27304f] px-6 py-5 text-center text-white">
+    <div className="twu-animate-in-up twu-hover-lift mt-4 rounded-[16px] bg-[#27304f] px-4 py-5 text-center text-white sm:px-6">
       <p className="mb-2 text-[17px] font-bold">Хотите этот тур?</p>
       <p className="mb-4 text-[14px] font-medium text-white/85">
         Оставьте заявку - она появится в вашем{" "}
@@ -64,7 +64,7 @@ export function TourBookingCta({ tourSlug, tourTitle }: Props) {
             type="button"
             disabled={loading}
             onClick={() => void onBook()}
-            className="twu-btn-soft inline-block rounded-[69px] bg-[#ec9b74] px-6 py-2.5 text-[16px] font-bold text-white hover:opacity-95 disabled:opacity-60"
+            className="twu-btn-soft inline-block max-w-full rounded-[69px] bg-[#ec9b74] px-5 py-2.5 text-[15px] font-bold leading-snug text-white hover:opacity-95 disabled:opacity-60 sm:px-6 sm:text-[16px]"
           >
             {loading ? "Отправка…" : `Подать заявку: «${tourTitle}»`}
           </button>

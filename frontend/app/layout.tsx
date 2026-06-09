@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   title: "TravelWithUs - туры в Китай",
   description:
     "Авторские маршруты по Китаю: Шанхай, горы Аватара, Великая стена и многое другое.",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 function AdobeFontsLink({ kitId }: { kitId: string }) {

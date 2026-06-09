@@ -192,17 +192,17 @@ export function AccountClient() {
                   <h2 className="text-[17px] font-bold text-[#27304f]">Контактные данные</h2>
                 </div>
                 <dl className="divide-y divide-[#e7e8ec] px-5">
-                  <div className="flex justify-between gap-4 py-3.5">
+                  <div className="flex flex-col gap-1 py-3.5 sm:flex-row sm:justify-between sm:gap-4">
                     <dt className="text-[14px] text-[#626d7a]">Имя</dt>
                     <dd className="text-right text-[14px] font-semibold text-[#27304f]">{displayName}</dd>
                   </div>
-                  <div className="flex justify-between gap-4 py-3.5">
+                  <div className="flex flex-col gap-1 py-3.5 sm:flex-row sm:justify-between sm:gap-4">
                     <dt className="text-[14px] text-[#626d7a]">Телефон</dt>
                     <dd className="text-right text-[14px] font-semibold text-[#27304f]">{me.phone || "-"}</dd>
                   </div>
-                  <div className="flex justify-between gap-4 py-3.5">
+                  <div className="flex flex-col gap-1 py-3.5 sm:flex-row sm:justify-between sm:gap-4">
                     <dt className="text-[14px] text-[#626d7a]">ВКонтакте</dt>
-                    <dd className="max-w-[65%] truncate text-right text-[14px] font-semibold">
+                    <dd className="break-all text-[14px] font-semibold sm:max-w-[65%] sm:text-right">
                       {me.vk_url ? (
                         <a href={me.vk_url} target="_blank" rel="noopener noreferrer" className="text-[#ec9b74] hover:underline">
                           {me.vk_url.replace(/^https?:\/\//, "")}
@@ -212,13 +212,13 @@ export function AccountClient() {
                       )}
                     </dd>
                   </div>
-                  <div className="flex justify-between gap-4 py-3.5">
+                  <div className="flex flex-col gap-1 py-3.5 sm:flex-row sm:justify-between sm:gap-4">
                     <dt className="text-[14px] text-[#626d7a]">Email</dt>
-                    <dd className="max-w-[65%] truncate text-right text-[14px] font-semibold text-[#27304f]">
+                    <dd className="break-all text-[14px] font-semibold text-[#27304f] sm:max-w-[65%] sm:text-right">
                       {me.email || "-"}
                     </dd>
                   </div>
-                  <div className="flex justify-between gap-4 py-3.5">
+                  <div className="flex flex-col gap-1 py-3.5 sm:flex-row sm:justify-between sm:gap-4">
                     <dt className="text-[14px] text-[#626d7a]">Дата рождения</dt>
                     <dd className="text-[14px] font-semibold text-[#27304f]">
                       {me.birth_date ? new Date(me.birth_date).toLocaleDateString("ru-RU") : "-"}

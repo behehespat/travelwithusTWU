@@ -15,7 +15,7 @@ const FOOTER_LOGO_HEIGHT = 214;
 export function SiteFooter({ className = "" }: { className?: string }) {
   return (
     <footer className={`text-white ${className}`}>
-      <div className="mx-auto max-w-7xl px-8 py-12 sm:px-10 sm:py-14 lg:px-12">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-10 sm:py-14 lg:px-12">
         <div className="flex flex-wrap items-start justify-center gap-x-14 gap-y-12 md:gap-x-16 lg:flex-nowrap lg:items-center lg:justify-between lg:gap-x-10 xl:gap-x-14">
           <div className="flex shrink-0 justify-center sm:justify-start">
             <Link href="/" aria-label="TravelWithUs - на главную">
@@ -113,7 +113,7 @@ export function SiteFooter({ className = "" }: { className?: string }) {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-8 py-6 text-left text-[12px] text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-12 lg:text-[13px]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-left text-[12px] text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-12 lg:text-[13px]">
           <p>© {new Date().getFullYear()} TravelWithUs. Все права защищены.</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             <Link href="/privacy" className="twu-link-soft hover:text-[#ec9b74]">

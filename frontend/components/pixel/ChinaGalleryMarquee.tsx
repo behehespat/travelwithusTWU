@@ -1,4 +1,4 @@
-﻿import type { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
 /**
  * Локальные фото из `public/main-slider/` (порядок - как в папке, по имени файла).
@@ -59,24 +59,39 @@ function SlideStrip({ stripId }: { stripId: "a" | "b" }) {
   );
 }
 
+type ChinaGalleryMarqueeProps = {
+  /** В потоке документа (мобильная главная), без абсолютного позиционирования Figma. */
+  inline?: boolean;
+};
+
+const marqueeStyle = {
+  height: CARD_H,
+  ["--china-slide-count" as string]: CHINA_SLIDE_COUNT,
+  ["--china-marquee-duration" as string]: `${MARQUEE_DURATION_SEC}s`,
+  ["--china-card-w" as string]: `${CARD_W}px`,
+  ["--china-card-gap" as string]: `${GAP_PX}px`,
+} as CSSProperties;
+
 /**
  * Бесконечная горизонтальная прокрутка на месте шести серых карточек макета.
  */
-export function ChinaGalleryMarquee() {
+export function ChinaGalleryMarquee({ inline = false }: ChinaGalleryMarqueeProps) {
   return (
     <div
-      className="pointer-events-none absolute left-1/2 w-screen max-w-none -translate-x-1/2 overflow-hidden"
-      style={
-        {
-          top: "calc(3977px - var(--twu-lead-gap, 0px))",
-          height: CARD_H,
-          ["--china-slide-count" as string]: CHINA_SLIDE_COUNT,
-          ["--china-marquee-duration" as string]: `${MARQUEE_DURATION_SEC}s`,
-          ["--china-card-w" as string]: `${CARD_W}px`,
-          ["--china-card-gap" as string]: `${GAP_PX}px`,
-        } as CSSProperties
+      className={
+        inline
+          ? "relative w-full overflow-hidden"
+          : "pointer-events-none absolute left-1/2 w-screen max-w-none -translate-x-1/2 overflow-hidden"
       }
-      aria-hidden
+      style={
+        inline
+          ? marqueeStyle
+          : {
+              ...marqueeStyle,
+              top: "calc(3977px - var(--twu-lead-gap, 0px))",
+            }
+      }
+      aria-hidden={inline ? undefined : true}
       data-name="china-gallery-marquee"
     >
       <div className="china-marquee-track flex w-max will-change-transform">

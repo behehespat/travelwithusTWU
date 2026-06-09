@@ -32,14 +32,14 @@ export function TourGallerySlider({ slides }: Props) {
   }, [total]);
 
   if (!total) {
-    return <div className="twu-animate-in mb-12 aspect-[21/9] w-full rounded-[20px] bg-[#f7f7f6]" />;
+    return <div className="twu-animate-in mb-12 aspect-[4/3] w-full rounded-[20px] bg-[#f7f7f6] sm:aspect-[21/9]" />;
   }
 
   const slide = slides[index]!;
 
   return (
     <section className="twu-animate-in-up mb-12" aria-label="Фотогалерея тура">
-      <div className="relative aspect-[21/9] w-full overflow-hidden rounded-[20px] bg-[#f7f7f6]">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[20px] bg-[#f7f7f6] sm:aspect-[21/9]">
         <TourPhoto
           key={slide.src}
           src={slide.src}

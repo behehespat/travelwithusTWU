@@ -37,6 +37,7 @@ body {
   margin: 0;
   color: var(--foreground);
   background: var(--background);
+  overflow-x: hidden;
 }
 
 /** Self-host: то же семейство, что в макете Figma (Mark Simonson). */
@@ -54,7 +55,8 @@ body {
 }
 
 img {
-  max-width: none;
+  max-width: 100%;
+  height: auto;
 }
 
 @keyframes china-marquee {

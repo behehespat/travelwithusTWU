@@ -34,3 +34,6 @@ npm-debug.log*
 .cursor/
 .agents/
 skills-lock.json
+
+# Локальная документация проекта (не в репозиторий)
+docs/
