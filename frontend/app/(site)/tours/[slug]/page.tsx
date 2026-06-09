@@ -6,7 +6,7 @@ import { serverApiBase } from "@/lib/apiBase";
 import { withLocalTourImages } from "@/lib/tourAssets";
 import type { TourDetailDto } from "@/lib/types";
 import { TourBookingCta } from "@/components/tour/TourBookingCta";
-import { TourPhoto } from "@/components/tour/TourPhoto";
+import { TourGallerySlider, buildTourGallerySlides } from "@/components/tour/TourGallerySlider";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +40,7 @@ export default async function TourDetailPage({ params }: Props) {
   const raw = await fetchTour(slug);
   if (!raw) notFound();
   const tour = withLocalTourImages(raw);
+  const gallerySlides = buildTourGallerySlides(tour);
 
   return (
     <article>
@@ -64,32 +65,18 @@ export default async function TourDetailPage({ params }: Props) {
         </section>
       ) : null}
 
-      <div className="relative mb-12 aspect-[21/9] w-full overflow-hidden rounded-[20px] bg-[#f7f7f6]">
-        <TourPhoto
-          src={tour.image_url}
-          className="absolute inset-0 h-full w-full object-cover"
-          priority
-        />
-      </div>
+      <TourGallerySlider slides={gallerySlides} />
 
       <h2 className="mb-6 text-[24px] font-bold text-[#27304f]">Места и акценты маршрута</h2>
-      <div className="space-y-10">
+      <div className="space-y-8">
         {tour.places?.length ? (
           tour.places.map((place) => (
             <section
               key={place.name}
-              className="grid gap-6 border-b border-black/10 pb-10 last:border-0 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-start"
+              className="border-b border-black/10 pb-8 last:border-0"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[16px] bg-[#f7f7f6]">
-                <TourPhoto
-                  src={place.image_url}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-              <div>
-                <h3 className="mb-2 text-[20px] font-bold text-[#27304f]">{place.name}</h3>
-                <p className="text-[16px] leading-relaxed text-[#27304f]/88">{place.detail}</p>
-              </div>
+              <h3 className="mb-2 text-[20px] font-bold text-[#27304f]">{place.name}</h3>
+              <p className="max-w-3xl text-[16px] leading-relaxed text-[#27304f]/88">{place.detail}</p>
             </section>
           ))
         ) : (

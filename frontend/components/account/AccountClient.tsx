@@ -30,17 +30,6 @@ function accountTitle(me: MeDto): string {
   return me.username;
 }
 
-function initials(name: string, username: string): string {
-  const n = name.trim();
-  if (n.length >= 2) return n.slice(0, 2).toUpperCase();
-  const handle = username.includes("@") ? username.split("@")[0] : username;
-  return handle.slice(0, 2).toUpperCase();
-}
-
-function showUsernameHandle(username: string): boolean {
-  return !username.includes("@");
-}
-
 const sideNavBtn = (active: boolean) =>
   `block w-full rounded-lg px-3 py-2.5 text-left text-[15px] font-semibold transition ${
     active ? "bg-[#27304f]/10 text-[#27304f]" : "text-[#27304f]/75 hover:bg-[#27304f]/5"
@@ -173,23 +162,6 @@ export function AccountClient() {
 
   return (
     <div className="min-h-[70vh] bg-[#ebedf0]">
-      <div className="bg-gradient-to-r from-[#27304f] to-[#3d4a6e] px-4 py-8 sm:px-6">
-        <div className="mx-auto flex max-w-5xl items-center gap-5">
-          <div
-            className="flex h-[96px] w-[96px] shrink-0 items-center justify-center rounded-full border-4 border-white/20 bg-[#ec9b74] text-[32px] font-bold text-white shadow-lg"
-            aria-hidden
-          >
-            {initials(displayName, me.username)}
-          </div>
-          <div className="min-w-0 text-white">
-            <h1 className="truncate text-[26px] font-bold sm:text-[30px]">{displayName}</h1>
-            {showUsernameHandle(me.username) ? (
-              <p className="mt-1 text-[14px] text-white/75">@{me.username}</p>
-            ) : null}
-          </div>
-        </div>
-      </div>
-
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 sm:px-6 md:flex-row md:items-start">
         <aside className="w-full shrink-0 rounded-xl border border-[#d3d9de] bg-white p-2 shadow-sm md:w-[240px]">
           <nav className="space-y-0.5" aria-label="Разделы кабинета">
