@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { serverApiBase } from "@/lib/apiBase";
+import { isLocalTourImage, withLocalTourImages } from "@/lib/tourAssets";
 import type { TourDetailDto } from "@/lib/types";
 import { TourBookingCta } from "@/components/tour/TourBookingCta";
 
@@ -22,104 +23,6 @@ async function fetchTour(slug: string): Promise<TourDetailDto | null> {
   }
 }
 
-/** Статика из `public/tours/tour 1/` (пробел в имени папки кодируется). */
-function tour1Asset(filename: string) {
-  return encodeURI(`/tours/tour 1/${filename}`);
-}
-
-/** Статика из `public/tours/tour 2/`. */
-function tour2Asset(filename: string) {
-  return encodeURI(`/tours/tour 2/${filename}`);
-}
-
-/** Статика из `public/tours/tour 3/`. */
-function tour3Asset(filename: string) {
-  return encodeURI(`/tours/tour 3/${filename}`);
-}
-
-/** Статика из `public/tours/tour 4/`. */
-function tour4Asset(filename: string) {
-  return encodeURI(`/tours/tour 4/${filename}`);
-}
-
-/** Локальные фото для страницы «Шанхай - Сучжоу» вместо Unsplash из API. */
-function withShanghaiSuzhouPublicImages(tour: TourDetailDto): TourDetailDto {
-  if (tour.slug !== "shanghai-suzhou") return tour;
-  const byPlace: Record<string, string> = {
-    "Шанхай, набережная Бунд": tour1Asset("ShanghaiBundEmbankment.jpg"),
-    "Сучжоу, классические сады": tour1Asset("SuzhouClassicalGardens.jpg"),
-    "Шанхай, Старый город": tour1Asset("ShanghaiOldTown.jpg"),
-  };
-  const hero = tour1Asset("ShanghaiBundEmbankment.jpg");
-  return {
-    ...tour,
-    image_url: hero,
-    places: tour.places?.map((p) => ({
-      ...p,
-      image_url: byPlace[p.name] ?? p.image_url,
-    })),
-  };
-}
-
-/** Локальные фото для «Шанхайские небоскрёбы и парящие горы Китая» (`shanghai-avatar`). */
-function withShanghaiAvatarPublicImages(tour: TourDetailDto): TourDetailDto {
-  if (tour.slug !== "shanghai-avatar") return tour;
-  const byPlace: Record<string, string> = {
-    "Шанхай, Луцзяцзуй": tour2Asset("Shanghai, Lujiazui.jpg"),
-    "Чжанцзяцзе, парк Улинъюань": tour2Asset("Zhangjiajie, Wulingyuan Park.jpg"),
-    "Тяньцзымэнь - стеклянный мост": tour2Asset("Tianzimen - the Glass Bridge.jpg"),
-  };
-  const hero = tour2Asset("Shanghai, Lujiazui.jpg");
-  return {
-    ...tour,
-    image_url: hero,
-    places: tour.places?.map((p) => ({
-      ...p,
-      image_url: byPlace[p.name] ?? p.image_url,
-    })),
-  };
-}
-
-/** Локальные фото для «Великий Китай» (`great-china`). */
-function withGreatChinaPublicImages(tour: TourDetailDto): TourDetailDto {
-  if (tour.slug !== "great-china") return tour;
-  const byPlace: Record<string, string> = {
-    Чжанцзяцзе: tour3Asset("Zhangjiajie.jpg"),
-    "Великая стена (Мутяньюй)": tour3Asset("The Great Wall (Mutianyu).jpg"),
-    "Сиань, Терракотовая армия": tour3Asset("Xi'an, the Terracotta Army.jpg"),
-    Шанхай: tour3Asset("Shanghai.png"),
-  };
-  const hero = tour3Asset("Zhangjiajie.jpg");
-  return {
-    ...tour,
-    image_url: hero,
-    places: tour.places?.map((p) => ({
-      ...p,
-      image_url: byPlace[p.name] ?? p.image_url,
-    })),
-  };
-}
-
-/** Локальные фото для «Контрасты Поднебесной» (`contrasts`). */
-function withContrastsPublicImages(tour: TourDetailDto): TourDetailDto {
-  if (tour.slug !== "contrasts") return tour;
-  const byPlace: Record<string, string> = {
-    "Яншо, река Юйлун": tour4Asset("Yangshuo, Yulong River.png"),
-    Чжанцзяцзе: tour4Asset("Zhangjiajie.jpg"),
-    "Пекин, Запретный город": tour4Asset("Beijing, the Forbidden City.jpg"),
-    Чжуцзяцзяо: tour4Asset("Zhujiajiao.webp"),
-  };
-  const hero = tour4Asset("Yangshuo, Yulong River.png");
-  return {
-    ...tour,
-    image_url: hero,
-    places: tour.places?.map((p) => ({
-      ...p,
-      image_url: byPlace[p.name] ?? p.image_url,
-    })),
-  };
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const tour = await fetchTour(slug);
@@ -132,13 +35,15 @@ function formatPrice(n: number) {
   return new Intl.NumberFormat("ru-RU").format(n) + " ₽";
 }
 
+function tourImageUnoptimized(src: string): boolean {
+  return isLocalTourImage(src) || src.includes("figma.com");
+}
+
 export default async function TourDetailPage({ params }: Props) {
   const { slug } = await params;
   const raw = await fetchTour(slug);
   if (!raw) notFound();
-  const tour = withContrastsPublicImages(
-    withGreatChinaPublicImages(withShanghaiAvatarPublicImages(withShanghaiSuzhouPublicImages(raw))),
-  );
+  const tour = withLocalTourImages(raw);
 
   return (
     <article>
@@ -170,7 +75,7 @@ export default async function TourDetailPage({ params }: Props) {
           fill
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 896px"
-          unoptimized={tour.image_url.includes("figma.com")}
+          unoptimized={tourImageUnoptimized(tour.image_url)}
           priority
         />
       </div>
@@ -190,7 +95,7 @@ export default async function TourDetailPage({ params }: Props) {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 480px"
-                  unoptimized={place.image_url.includes("figma.com")}
+                  unoptimized={tourImageUnoptimized(place.image_url)}
                 />
               </div>
               <div>
