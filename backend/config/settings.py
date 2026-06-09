@@ -5,10 +5,19 @@ Django settings for TravelWithUs API.
 
 import os
 from pathlib import Path
-
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def _normalize_origin(value: str) -> str:
+    """Django 4+ требует схему (https://) в CORS/CSRF origins."""
+    value = value.strip().rstrip("/")
+    if not value:
+        return value
+    if "://" not in value:
+        return f"https://{value}"
+    return value
 
 # Секреты из backend/.env локально (не коммитить).
 _env_path = BASE_DIR / ".env"
@@ -138,7 +147,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3100",
 ]
 
-_frontend_url = (os.environ.get("FRONTEND_URL") or "").rstrip("/")
+_frontend_url = _normalize_origin(os.environ.get("FRONTEND_URL") or "")
 if _frontend_url and _frontend_url not in CORS_ALLOWED_ORIGINS:
     CORS_ALLOWED_ORIGINS.append(_frontend_url)
 
@@ -153,7 +162,7 @@ else:
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    o.strip()
+    _normalize_origin(o)
     for o in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
     if o.strip()
 ]
@@ -169,7 +178,7 @@ if not DEBUG:
 VK_COMMUNITY_TOKEN = os.environ.get("VK_COMMUNITY_TOKEN", "")
 VK_API_VERSION = os.environ.get("VK_API_VERSION", "5.199")
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:3100")
+FRONTEND_URL = _frontend_url or "http://127.0.0.1:3100"
 
 # Почта
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
